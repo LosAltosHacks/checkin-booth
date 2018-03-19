@@ -1,0 +1,26 @@
+{
+  "name": "checkin-booth",
+  "version": "1.0.0",
+  "description": "Check people into the event and print their name badge",
+  "scripts": {
+    "start": "watchify client.js -o public/bundle.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "airtable": "^0.5.2",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "fuse.js": "^3.2.0",
+    "helmet": "^3.12.0",
+    "hint.css": "^2.5.0",
+    "https": "^1.0.0",
+    "mithril": "^1.1.6",
+    "normalize.css": "^8.0.0",
+    "queue": "^4.4.2",
+    "sse": "0.0.8"
+  },
+  "devDependencies": {
+    "browserify": "^16.1.1",
+    "watchify": "^3.11.0"
+  }
+}
