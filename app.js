@@ -37,7 +37,8 @@ let pingSub = {
   ping() {
     for (let key of Object.keys(this.subscribers)) {
       this.subscribers[key].send({
-        event: "ping"
+        event: "ping",
+        data: "pong"
       });
     }
   }
@@ -134,7 +135,18 @@ app.post("/print", (req, res) => {
           "Checked In": true
         },
         (err, _) => {
-          if (err) console.error(err);
+          if (err) {
+            console.error(
+              `Failed to check in ${firstName} ${lastName} (id: ${
+                req.body.id
+              }) on Airtable`,
+              err
+            );
+          }
+          attendeeList.find(
+            attendee => attendee.id == req.body.id
+          ).checkedIn = true;
+          pingSub.ping();
         }
       );
 
