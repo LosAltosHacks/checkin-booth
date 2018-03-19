@@ -10,13 +10,13 @@ let Attendee = {
   selectedAttendee: {},
   attendeeList: [],
 
-  loadAttendees: () =>
+  loadAttendees() {
     m.request("/attendees").then(result => {
-      Attendee.attendeeList = result.sort(
+      this.attendeeList = result.sort(
         (a, b) =>
           `${a.firstName} ${a.lastName}` > `${b.firstName} ${b.lastName}`
       );
-      Attendee.fuse = new Fuse(Attendee.attendeeList, {
+      this.fuse = new Fuse(this.attendeeList, {
         shouldSort: true,
         threshold: 0.6,
         location: 0,
@@ -25,38 +25,36 @@ let Attendee = {
         minMatchCharLength: 1,
         keys: ["firstName", "lastName"]
       });
-    }),
+    });
+  },
 
-  search: () => {
-    if (Attendee.fuse == undefined || Attendee.searchText.length == 0) {
-      Attendee.searchResults = Attendee.attendeeList
-        .filter(attendee => attendee.checkedIn == Attendee.showCheckedIn)
+  search() {
+    if (this.fuse == undefined || this.searchText.length == 0) {
+      this.searchResults = this.attendeeList
+        .filter(attendee => attendee.checkedIn == this.showCheckedIn)
         .slice(0, 15);
-    } else if (Attendee.fuse != undefined) {
-      Attendee.searchResults = Attendee.fuse
+    } else if (this.fuse != undefined) {
+      this.searchResults = this.fuse
         .search(Attendee.searchText)
-        .filter(attendee => attendee.checkedIn == Attendee.showCheckedIn)
+        .filter(attendee => attendee.checkedIn == this.showCheckedIn)
         .slice(0, 15);
     }
-    Attendee.updateSearchPosition(0);
+    this.updateSearchPosition(0);
   },
-  updateSearchPosition: offset => {
-    Attendee.searchPosition = Math.max(
+  updateSearchPosition(offset) {
+    this.searchPosition = Math.max(
       0,
-      Math.min(
-        Attendee.searchResults.length - 1,
-        Attendee.searchPosition + offset
-      )
+      Math.min(this.searchResults.length - 1, this.searchPosition + offset)
     );
   },
 
-  selectAttendee: attendee => {
-    Attendee.isAttendeeSelected = true;
-    Attendee.selectedAttendee = Object.create(attendee);
+  selectAttendee(attendee) {
+    this.isAttendeeSelected = true;
+    this.selectedAttendee = Object.create(attendee);
   },
-  clearSelectedAttendee: () => {
-    Attendee.isAttendeeSelected = false;
-    Attendee.selectedAttendee = {
+  clearSelectedAttendee() {
+    this.isAttendeeSelected = false;
+    this.selectedAttendee = {
       id: "",
       firstName: "",
       lastName: "",
