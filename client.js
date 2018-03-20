@@ -57,7 +57,7 @@ let People = {
       id: "",
       firstName: "",
       lastName: "",
-      waiver: false,
+      docuSign: false,
       checkedIn: false,
       code: ""
     };
@@ -157,18 +157,18 @@ let PersonForm = {
         "fieldset",
         m(
           "label",
-          "Waiver signed",
+          "Documents signed",
           m("input[type=checkbox][disabled]", {
-            checked: People.selectedPerson.waiver
+            checked: People.selectedPerson.docuSign
           })
         )
       ),
       m(
         "button",
-        People.isPersonSelected && !People.selectedPerson.waiver
+        People.isPersonSelected && !People.selectedPerson.docuSign
           ? {
               class: "hint--bottom hint--error",
-              "aria-label": "Waiver must be signed first",
+              "aria-label": "Documents must be signed first",
               disabled: true
             }
           : {
