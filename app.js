@@ -80,7 +80,7 @@ app.post("/print", (req, res) => {
     setTimeout(() => {
       log(`Printing '${firstName}' '${lastName}'`);
       try {
-        if (req.body.code != undefined) {
+        if (req.body.code != undefined && req.body.code.length != 0) {
           child_process.execSync(
             `osascript printBadge.applescript '${firstName}' '${lastName}' '${req.body.code}'`,
             {
