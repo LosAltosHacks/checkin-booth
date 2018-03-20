@@ -148,9 +148,7 @@ let PersonForm = {
               type: People.selectedPerson.type
             }
           });
-          People.peopleList.find(
-            person => person.code == People.selectedPerson.code
-          ).checkedIn = true;
+          People.peopleList.find(person => person.id == People.selectedPerson.id).checkedIn = true;
           People.clearSelectedPerson();
           People.searchText = "";
           document.getElementById("people-search").focus();
