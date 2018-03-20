@@ -57,7 +57,7 @@ let Attendee = {
       id: "",
       firstName: "",
       lastName: "",
-      parentPacket: false,
+      waiver: false,
       checkedIn: false,
       code: ""
     };
@@ -157,7 +157,7 @@ let AttendeeForm = {
         "fieldset",
         m(
           "label",
-          "Parent Packet signed",
+          "Waiver signed",
           m("input[type=checkbox][disabled]", {
             checked: Attendee.selectedAttendee.parentPacket
           })
@@ -168,7 +168,7 @@ let AttendeeForm = {
         Attendee.isAttendeeSelected && !Attendee.selectedAttendee.parentPacket
           ? {
               class: "hint--bottom hint--error",
-              "aria-label": "Parent packet must be signed first",
+              "aria-label": "Waiver must be signed first",
               disabled: true
             }
           : {
@@ -182,12 +182,12 @@ let AttendeeForm = {
 let AttendeeCounts = {
   view: () => {
     let checkedInCount = Attendee.attendeeList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
-    let signedCount = Attendee.attendeeList.reduce((a, b) => a + (b.parentPacket ? 1 : 0), 0);
+    let signedCount = People.peopleList.reduce((a, b) => a + (b.waiver ? 1 : 0), 0);
     return m(
       "div",
       `${checkedInCount}/${Attendee.attendeeList.length} attendees checked in`,
       m("br"),
-      `${signedCount}/${Attendee.attendeeList.length} parent packets signed`
+      `${signedCount}/${People.peopleList.length} waivers signed`
     );
   }
 };
