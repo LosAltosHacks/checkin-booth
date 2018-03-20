@@ -65,16 +65,16 @@ let People = {
   requiresDocuments() {
     if (this.isPersonSelected) {
       switch (this.selectedPerson.type) {
-      case "Attendee":
-      case "Mentor":
-      case "Chaperone":
-        return true;
-      case "Sponsor":
-      case "Judge":
-        return false;
-      default:
-        console.error(`Invalid person type: ${this.selectedPerson.type}`);
-        return false;
+        case "Attendee":
+        case "Mentor":
+        case "Chaperone":
+          return true;
+        case "Sponsor":
+        case "Judge":
+          return false;
+        default:
+          console.error(`Invalid person type: ${this.selectedPerson.type}`);
+          return false;
       }
     } else {
       return false;
