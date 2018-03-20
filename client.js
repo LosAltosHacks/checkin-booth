@@ -256,8 +256,6 @@ document.body.addEventListener("keydown", e => {
 });
 
 let es = new EventSource("/sse");
-es.addEventListener("ping", () => {
-  People.loadPeople();
-});
+es.addEventListener("ping", () => People.loadPeople().then(People.search()));
 
 m.mount(document.body, Dashboard);
