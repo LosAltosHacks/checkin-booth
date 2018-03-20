@@ -209,7 +209,9 @@ let PersonForm = {
 let PeopleCounts = {
   view: () => {
     let checkedInCount = People.peopleList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
-    let signPeople = People.peopleList.filter(p => p.type == "Attendee" || p.type == "Mentor" || p.type == "Chaperone");
+    let signPeople = People.peopleList.filter(
+      p => p.type == "Attendee" || p.type == "Mentor" || p.type == "Chaperone"
+    );
     let signedCount = signPeople.reduce((a, b) => a + (b.docuSign ? 1 : 0), 0);
 
     return m(
