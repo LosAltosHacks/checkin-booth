@@ -105,7 +105,7 @@ app.get("/attendees", (req, res) => {
 });
 app.post("/print", (req, res) => {
   printQueue.push(cb => {
-    let nameRegex = /[^A-Za-z \-]/g;
+    let nameRegex = /[^A-Za-z ()\-]/g;
     let firstName = req.body.firstName.replace(nameRegex, "");
     let lastName = req.body.lastName.replace(nameRegex, "");
 
