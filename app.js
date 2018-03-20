@@ -51,14 +51,10 @@ let log = msg => {
 
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/normalize.css", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "node_modules", "normalize.css", "normalize.css")
-  );
+  res.sendFile(path.join(__dirname, "node_modules", "normalize.css", "normalize.css"));
 });
 app.get("/hint.css", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "node_modules", "hint.css", "hint.min.css")
-  );
+  res.sendFile(path.join(__dirname, "node_modules", "hint.css", "hint.min.css"));
 });
 
 app.get("/people", (req, res) => {
@@ -76,20 +72,15 @@ app.post("/print", (req, res) => {
       try {
         if (req.body.code != undefined) {
           child_process.execSync(
-            `osascript printBadge.applescript '${firstName}' '${lastName}' '${
-              req.body.code
-            }'`,
+            `osascript printBadge.applescript '${firstName}' '${lastName}' '${req.body.code}'`,
             {
               cwd: path.join(__dirname, "scripts")
             }
           );
         } else {
-          child_process.execSync(
-            `osascript printBadge.applescript '${firstName}' '${lastName}'`,
-            {
-              cwd: path.join(__dirname, "scripts")
-            }
-          );
+          child_process.execSync(`osascript printBadge.applescript '${firstName}' '${lastName}'`, {
+            cwd: path.join(__dirname, "scripts")
+          });
         }
       } catch (err) {
         console.error(`Failed to print '${firstName}' '${lastName}'`, err);
@@ -121,9 +112,7 @@ app.post("/print", (req, res) => {
         (err, _) => {
           if (err) {
             console.error(
-              `Failed to check in ${
-                req.body.type
-              } ${firstName} ${lastName} (id: ${
+              `Failed to check in ${req.body.type} ${firstName} ${lastName} (id: ${
                 req.body.id
               }) in table ${tableName}`,
               err

@@ -13,8 +13,7 @@ let Attendee = {
   loadAttendees() {
     return m.request("/attendees").then(result => {
       this.attendeeList = result.sort(
-        (a, b) =>
-          `${a.firstName} ${a.lastName}` > `${b.firstName} ${b.lastName}`
+        (a, b) => `${a.firstName} ${a.lastName}` > `${b.firstName} ${b.lastName}`
       );
       this.fuse = new Fuse(this.attendeeList, {
         shouldSort: true,
@@ -85,9 +84,7 @@ let AttendeePicker = {
           } else if (e.keyCode == 40) {
             Attendee.updateSearchPosition(1);
           } else if (e.keyCode == 13) {
-            Attendee.selectAttendee(
-              Attendee.searchResults[Attendee.searchPosition]
-            );
+            Attendee.selectAttendee(Attendee.searchResults[Attendee.searchPosition]);
             e.preventDefault();
             document.getElementById("first-name").focus();
           }
@@ -103,9 +100,7 @@ let AttendeePicker = {
             {
               onclick: e => {
                 Attendee.searchPosition = i;
-                Attendee.selectAttendee(
-                  Attendee.searchResults[Attendee.searchPosition]
-                );
+                Attendee.selectAttendee(Attendee.searchResults[Attendee.searchPosition]);
                 e.preventDefault();
                 document.getElementById("first-name").focus();
               }
@@ -150,18 +145,12 @@ let AttendeeForm = {
         m("input#first-name", {
           required: Attendee.isAttendeeSelected,
           value: Attendee.selectedAttendee.firstName,
-          onchange: m.withAttr(
-            "value",
-            value => (Attendee.selectedAttendee.firstName = value)
-          )
+          onchange: m.withAttr("value", value => (Attendee.selectedAttendee.firstName = value))
         }),
         m("input", {
           required: Attendee.isAttendeeSelected,
           value: Attendee.selectedAttendee.lastName,
-          onchange: m.withAttr(
-            "value",
-            value => (Attendee.selectedAttendee.lastName = value)
-          )
+          onchange: m.withAttr("value", value => (Attendee.selectedAttendee.lastName = value))
         })
       ),
       m(
@@ -192,14 +181,8 @@ let AttendeeForm = {
 
 let AttendeeCounts = {
   view: () => {
-    let checkedInCount = Attendee.attendeeList.reduce(
-      (a, b) => a + (b.checkedIn ? 1 : 0),
-      0
-    );
-    let signedCount = Attendee.attendeeList.reduce(
-      (a, b) => a + (b.parentPacket ? 1 : 0),
-      0
-    );
+    let checkedInCount = Attendee.attendeeList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
+    let signedCount = Attendee.attendeeList.reduce((a, b) => a + (b.parentPacket ? 1 : 0), 0);
     return m(
       "div",
       `${checkedInCount}/${Attendee.attendeeList.length} attendees checked in`,
