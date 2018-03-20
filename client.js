@@ -61,6 +61,24 @@ let People = {
       checkedIn: false,
       code: ""
     };
+  },
+  requiresDocuments() {
+    if (this.isPersonSelected) {
+      switch (this.selectedPerson.type) {
+      case "Attendee":
+      case "Mentor":
+      case "Chaperone":
+        return true;
+      case "Sponsor":
+      case "Judge":
+        return false;
+      default:
+        console.error(`Invalid person type: ${this.selectedPerson.type}`);
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 };
 
@@ -154,7 +172,7 @@ let PersonForm = {
         })
       ),
       m(
-        "fieldset",
+        People.requiresDocuments() ? "fieldset" : ".hidden",
         m(
           "label",
           "Documents signed",
@@ -165,7 +183,7 @@ let PersonForm = {
       ),
       m(
         "button",
-        People.isPersonSelected && !People.selectedPerson.docuSign
+        People.isPersonSelected && People.requiresDocuments() && !People.selectedPerson.docuSign
           ? {
               class: "hint--bottom hint--error",
               "aria-label": "Documents must be signed first",
