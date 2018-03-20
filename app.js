@@ -113,14 +113,23 @@ app.post("/print", (req, res) => {
     setTimeout(() => {
       log(`Printing '${firstName}' '${lastName}'`);
       try {
-        child_process.execSync(
-          `osascript printBadge.applescript '${firstName}' '${lastName}' '${
-            req.body.code
-          }'`,
-          {
-            cwd: path.join(__dirname, "scripts")
-          }
-        );
+        if (req.body.code != undefined) {
+          child_process.execSync(
+            `osascript printBadge.applescript '${firstName}' '${lastName}' '${
+              req.body.code
+            }'`,
+            {
+              cwd: path.join(__dirname, "scripts")
+            }
+          );
+        } else {
+          child_process.execSync(
+            `osascript printBadge.applescript '${firstName}' '${lastName}'`,
+            {
+              cwd: path.join(__dirname, "scripts")
+            }
+          );
+        }
       } catch (err) {
         console.error(`Failed to print '${firstName}' '${lastName}'`, err);
       }
