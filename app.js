@@ -63,8 +63,18 @@ app.get("/people", (req, res) => {
 app.post("/print", (req, res) => {
   printQueue.push(cb => {
     let nameRegex = /[^A-Za-z ()\-]/g;
-    let firstName = req.body.firstName.replace(nameRegex, "");
-    let lastName = req.body.lastName.replace(nameRegex, "");
+    let firstName = req.body.firstName.replace(nameRegex, "").trim();
+    let lastName = req.body.lastName.replace(nameRegex, "").trim();
+
+    if (firstName.length == 0 || lastName.length == 0) {
+      console.error(`Can't print '${firstName}' '${lastName}': name(s) are empty`);
+      res.send("");
+      return;
+    } else if (firstName.length > 25 || lastName.length > 25) {
+      console.error(`Can't print '${firstName}' '${lastName}': name(s) are too long`);
+      res.send("");
+      return;
+    }
 
     // Spread out print jobs just in case DYMO Label chokes on simultaneous jobs
     setTimeout(() => {

@@ -142,8 +142,8 @@ let PersonForm = {
             url: "/print",
             data: {
               id: People.selectedPerson.id,
-              firstName: People.selectedPerson.firstName.trim(),
-              lastName: People.selectedPerson.lastName.trim(),
+              firstName: People.selectedPerson.firstName,
+              lastName: People.selectedPerson.lastName,
               code: People.selectedPerson.code,
               type: People.selectedPerson.type
             }
@@ -162,11 +162,13 @@ let PersonForm = {
         m("label", "Name"),
         m("input#first-name", {
           required: People.isPersonSelected,
+          maxlength: 25,
           value: People.selectedPerson.firstName,
           onchange: m.withAttr("value", value => (People.selectedPerson.firstName = value))
         }),
         m("input", {
           required: People.isPersonSelected,
+          maxlength: 25,
           value: People.selectedPerson.lastName,
           onchange: m.withAttr("value", value => (People.selectedPerson.lastName = value))
         })
