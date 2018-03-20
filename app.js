@@ -94,6 +94,8 @@ app.post("/print", (req, res) => {
         }
       } catch (err) {
         console.error(`Failed to print '${firstName}' '${lastName}'`, err);
+        pingSub.ping();
+        return;
       }
 
       let tableName;
