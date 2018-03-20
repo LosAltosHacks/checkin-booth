@@ -51,7 +51,7 @@ let loadAttendees = () => {
   let newAttendeeList = [];
   let trim = str => (str || "").trim();
 
-  base("Attendees")
+  base("AttendeesMentors")
     .select({
       fields: [
         "First Name",
@@ -129,7 +129,7 @@ app.post("/print", (req, res) => {
         console.error(`Failed to print '${firstName}' '${lastName}'`, err);
       }
 
-      base("Attendees").update(
+      base("AttendeesMentors").update(
         req.body.id,
         {
           "Checked In": true
