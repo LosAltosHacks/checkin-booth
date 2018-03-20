@@ -206,20 +206,20 @@ let PersonForm = {
     )
 };
 
-/*
-let AttendeeCounts = {
+let PeopleCounts = {
   view: () => {
     let checkedInCount = People.peopleList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
-    let signedCount = People.peopleList.reduce((a, b) => a + (b.waiver ? 1 : 0), 0);
+    let signPeople = People.peopleList.filter(p => p.type == "Attendee" || p.type == "Mentor" || p.type == "Chaperone");
+    let signedCount = signPeople.reduce((a, b) => a + (b.docuSign ? 1 : 0), 0);
+
     return m(
       "div",
       `${checkedInCount}/${People.peopleList.length} people checked in`,
       m("br"),
-      `${signedCount}/${People.peopleList.length} waivers signed`
+      `${signedCount}/${signPeople.length} documents signed`
     );
   }
 };
-*/
 
 let ShowCheckedInButton = {
   view: () =>
@@ -243,7 +243,7 @@ let Dashboard = {
       "main",
       m(
         "#people-panel",
-        m("div", m(PersonPicker), m(ShowCheckedInButton)),
+        m("div", m(PersonPicker), m(PeopleCounts), m(ShowCheckedInButton)),
         m(PersonForm)
       )
     )
