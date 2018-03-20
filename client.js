@@ -123,6 +123,7 @@ let PersonPicker = {
                 document.getElementById("first-name").focus();
               }
             },
+            m("div.type-indicator." + person.type.toLowerCase()),
             `${person.firstName} ${person.lastName}`
           )
         )

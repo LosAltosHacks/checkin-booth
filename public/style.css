@@ -35,6 +35,29 @@ main {
   font-weight: bold;
 }
 
+.type-indicator {
+    display: inline-block;
+    border-radius: 50%;
+    height: 0.7em;
+    width: 0.7em;
+    margin-right: 0.2em;
+}
+.attendee {
+    background: #78c6f0;
+}
+.sponsor {
+    background: #2ecc71;
+}
+.mentor {
+    background: #f39c12;
+}
+.chaperone {
+    background: #ffeb3b;
+}
+.judge {
+    background: #9e00f3;
+}
+
 #show-checked-in {
   margin-top: 1em;
 }
