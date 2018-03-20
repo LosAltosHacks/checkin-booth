@@ -1,21 +1,21 @@
 const Fuse = require("fuse.js");
 const m = require("mithril");
 
-let Attendee = {
+let People = {
   showCheckedIn: false,
   searchText: "",
   searchPosition: 0,
   searchResults: [],
-  isAttendeeSelected: false,
-  selectedAttendee: {},
-  attendeeList: [],
+  isPersonSelected: false,
+  selectedPerson: {},
+  peopleList: [],
 
-  loadAttendees() {
-    return m.request("/attendees").then(result => {
-      this.attendeeList = result.sort(
+  loadPeople() {
+    return m.request("/people").then(result => {
+      this.peopleList = result.sort(
         (a, b) => `${a.firstName} ${a.lastName}` > `${b.firstName} ${b.lastName}`
       );
-      this.fuse = new Fuse(this.attendeeList, {
+      this.fuse = new Fuse(this.peopleList, {
         shouldSort: true,
         threshold: 0.6,
         location: 0,
@@ -29,13 +29,13 @@ let Attendee = {
 
   search() {
     if (this.fuse == undefined || this.searchText.length == 0) {
-      this.searchResults = this.attendeeList
-        .filter(attendee => attendee.checkedIn == this.showCheckedIn)
+      this.searchResults = this.peopleList
+        .filter(person => person.checkedIn == this.showCheckedIn)
         .slice(0, 15);
     } else if (this.fuse != undefined) {
       this.searchResults = this.fuse
-        .search(Attendee.searchText)
-        .filter(attendee => attendee.checkedIn == this.showCheckedIn)
+        .search(People.searchText)
+        .filter(person => person.checkedIn == this.showCheckedIn)
         .slice(0, 15);
     }
     this.updateSearchPosition(0);
@@ -47,13 +47,13 @@ let Attendee = {
     );
   },
 
-  selectAttendee(attendee) {
-    this.isAttendeeSelected = true;
-    this.selectedAttendee = Object.create(attendee);
+  selectPerson(person) {
+    this.isPersonSelected = true;
+    this.selectedPerson = Object.create(person);
   },
-  clearSelectedAttendee() {
-    this.isAttendeeSelected = false;
-    this.selectedAttendee = {
+  clearSelectedPerson() {
+    this.isPersonSelected = false;
+    this.selectedPerson = {
       id: "",
       firstName: "",
       lastName: "",
@@ -64,55 +64,55 @@ let Attendee = {
   }
 };
 
-let AttendeePicker = {
-  oninit: () => Attendee.loadAttendees().then(() => Attendee.search()),
+let PersonPicker = {
+  oninit: () => People.loadPeople().then(() => People.search()),
   view: () =>
     m(
       "div",
-      m("input#attendee-search", {
+      m("input#people-search", {
         autofocus: true,
-        placeholder: "Search for attendees...",
-        value: Attendee.searchText,
+        placeholder: "Search for people...",
+        value: People.searchText,
         oninput: m.withAttr("value", value => {
-          Attendee.searchText = value;
-          Attendee.clearSelectedAttendee();
-          Attendee.search();
+          People.searchText = value;
+          People.clearSelectedPerson();
+          People.search();
         }),
         onkeydown: e => {
           if (e.keyCode == 38) {
-            Attendee.updateSearchPosition(-1);
+            People.updateSearchPosition(-1);
           } else if (e.keyCode == 40) {
-            Attendee.updateSearchPosition(1);
+            People.updateSearchPosition(1);
           } else if (e.keyCode == 13) {
-            Attendee.selectAttendee(Attendee.searchResults[Attendee.searchPosition]);
+            People.selectPerson(People.searchResults[People.searchPosition]);
             e.preventDefault();
             document.getElementById("first-name").focus();
           }
         }
       }),
       m(
-        "#attendee-list",
-        Attendee.searchResults.map((attendee, i) =>
+        "#people-list",
+        People.searchResults.map((person, i) =>
           m(
-            Attendee.searchPosition == i
-              ? ".attendee-selected"
-              : attendee.checkedIn ? ".checked-in" : "div",
+            People.searchPosition == i
+              ? ".person-selected"
+              : person.checkedIn ? ".checked-in" : "div",
             {
               onclick: e => {
-                Attendee.searchPosition = i;
-                Attendee.selectAttendee(Attendee.searchResults[Attendee.searchPosition]);
+                People.searchPosition = i;
+                People.selectPerson(People.searchResults[People.searchPosition]);
                 e.preventDefault();
                 document.getElementById("first-name").focus();
               }
             },
-            `${attendee.firstName} ${attendee.lastName}`
+            `${person.firstName} ${person.lastName}`
           )
         )
       )
     )
 };
 
-let AttendeeForm = {
+let PersonForm = {
   view: () =>
     m(
       "form",
@@ -123,34 +123,34 @@ let AttendeeForm = {
             method: "POST",
             url: "/print",
             data: {
-              id: Attendee.selectedAttendee.id,
-              firstName: Attendee.selectedAttendee.firstName.trim(),
-              lastName: Attendee.selectedAttendee.lastName.trim(),
-              code: Attendee.selectedAttendee.code,
-              type: Attendee.selectedAttendee.type
+              id: People.selectedPerson.id,
+              firstName: People.selectedPerson.firstName.trim(),
+              lastName: People.selectedPerson.lastName.trim(),
+              code: People.selectedPerson.code,
+              type: People.selectedPerson.type
             }
           });
-          Attendee.attendeeList.find(
-            attendee => attendee.code == Attendee.selectedAttendee.code
+          People.peopleList.find(
+            person => person.code == People.selectedPerson.code
           ).checkedIn = true;
-          Attendee.clearSelectedAttendee();
-          Attendee.searchText = "";
-          document.getElementById("attendee-search").focus();
-          Attendee.search();
+          People.clearSelectedPerson();
+          People.searchText = "";
+          document.getElementById("people-search").focus();
+          People.search();
         }
       },
       m(
         "fieldset",
         m("label", "Name"),
         m("input#first-name", {
-          required: Attendee.isAttendeeSelected,
-          value: Attendee.selectedAttendee.firstName,
-          onchange: m.withAttr("value", value => (Attendee.selectedAttendee.firstName = value))
+          required: People.isPersonSelected,
+          value: People.selectedPerson.firstName,
+          onchange: m.withAttr("value", value => (People.selectedPerson.firstName = value))
         }),
         m("input", {
-          required: Attendee.isAttendeeSelected,
-          value: Attendee.selectedAttendee.lastName,
-          onchange: m.withAttr("value", value => (Attendee.selectedAttendee.lastName = value))
+          required: People.isPersonSelected,
+          value: People.selectedPerson.lastName,
+          onchange: m.withAttr("value", value => (People.selectedPerson.lastName = value))
         })
       ),
       m(
@@ -159,51 +159,53 @@ let AttendeeForm = {
           "label",
           "Waiver signed",
           m("input[type=checkbox][disabled]", {
-            checked: Attendee.selectedAttendee.parentPacket
+            checked: People.selectedPerson.waiver
           })
         )
       ),
       m(
         "button",
-        Attendee.isAttendeeSelected && !Attendee.selectedAttendee.parentPacket
+        People.isPersonSelected && !People.selectedPerson.waiver
           ? {
               class: "hint--bottom hint--error",
               "aria-label": "Waiver must be signed first",
               disabled: true
             }
           : {
-              disabled: !Attendee.isAttendeeSelected
+              disabled: !People.isPersonSelected
             },
-        Attendee.showCheckedIn ? "Reprint badge" : "Check in and print badge"
+        People.showCheckedIn ? "Reprint badge" : "Check in and print badge"
       )
     )
 };
 
+/*
 let AttendeeCounts = {
   view: () => {
-    let checkedInCount = Attendee.attendeeList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
+    let checkedInCount = People.peopleList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
     let signedCount = People.peopleList.reduce((a, b) => a + (b.waiver ? 1 : 0), 0);
     return m(
       "div",
-      `${checkedInCount}/${Attendee.attendeeList.length} attendees checked in`,
+      `${checkedInCount}/${People.peopleList.length} people checked in`,
       m("br"),
       `${signedCount}/${People.peopleList.length} waivers signed`
     );
   }
 };
+*/
 
 let ShowCheckedInButton = {
   view: () =>
     m(
       "#show-checked-in",
-      "Show checked-in attendees",
+      "Show checked-in people",
       m("input[type=checkbox]", {
         onchange: m.withAttr("checked", checked => {
-          Attendee.showCheckedIn = checked;
-          Attendee.search();
-          Attendee.clearSelectedAttendee();
+          People.showCheckedIn = checked;
+          People.search();
+          People.clearSelectedPerson();
         }),
-        checked: Attendee.showCheckedIn
+        checked: People.showCheckedIn
       })
     )
 };
@@ -213,22 +215,22 @@ let Dashboard = {
     m(
       "main",
       m(
-        "#attendee-panel",
-        m("div", m(AttendeePicker), m(AttendeeCounts), m(ShowCheckedInButton)),
-        m(AttendeeForm)
+        "#people-panel",
+        m("div", m(PersonPicker), m(ShowCheckedInButton)),
+        m(PersonForm)
       )
     )
 };
 
 document.body.addEventListener("keydown", e => {
   if (e.keyCode == 27) {
-    document.getElementById("attendee-search").select();
+    document.getElementById("people-search").select();
   }
 });
 
 let es = new EventSource("/sse");
 es.addEventListener("ping", () => {
-  Attendee.loadAttendees();
+  People.loadPeople();
 });
 
 m.mount(document.body, Dashboard);

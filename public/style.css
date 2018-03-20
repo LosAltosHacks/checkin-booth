@@ -16,12 +16,12 @@ main {
   margin-top: 4em;
 }
 
-#attendee-panel {
+#people-panel {
   display: flex;
   flex-direction: row;
 }
 
-#attendee-list {
+#people-list {
   height: 18em;
   overflow-y: auto;
   margin-bottom: 1em;
@@ -31,7 +31,7 @@ main {
   color: #888;
 }
 
-.attendee-selected {
+.person-selected {
   font-weight: bold;
 }
 
