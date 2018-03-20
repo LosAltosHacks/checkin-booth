@@ -11,7 +11,7 @@ let Attendee = {
   attendeeList: [],
 
   loadAttendees() {
-    m.request("/attendees").then(result => {
+    return m.request("/attendees").then(result => {
       this.attendeeList = result.sort(
         (a, b) =>
           `${a.firstName} ${a.lastName}` > `${b.firstName} ${b.lastName}`
@@ -68,7 +68,7 @@ let Attendee = {
 };
 
 let AttendeePicker = {
-  oninit: () => Attendee.loadAttendees().then(Attendee.search),
+  oninit: () => Attendee.loadAttendees().then(() => Attendee.search()),
   view: () =>
     m(
       "div",
