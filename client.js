@@ -172,6 +172,14 @@ let PersonForm = {
         })
       ),
       m(
+        "fieldset",
+        m("label", "Type"),
+        m("input", {
+          disabled: true,
+          value: People.selectedPerson.type
+        })
+      ),
+      m(
         People.requiresDocuments() ? "fieldset" : ".hidden",
         m(
           "label",
