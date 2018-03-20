@@ -56,8 +56,6 @@ let loadAttendees = () => {
       fields: [
         "First Name",
         "Last Name",
-        "High School",
-        "Grade",
         "Parent Packet",
         "Checked In",
         "Code"
@@ -71,8 +69,6 @@ let loadAttendees = () => {
             id: r.id,
             firstName: trim(r.get("First Name")),
             lastName: trim(r.get("Last Name")),
-            school: trim(r.get("High School")),
-            grade: r.get("Grade"),
             parentPacket: !!r.get("Parent Packet"),
             checkedIn: !!r.get("Checked In"),
             code: r.get("Code").text

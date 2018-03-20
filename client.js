@@ -58,8 +58,6 @@ let Attendee = {
       id: "",
       firstName: "",
       lastName: "",
-      school: "",
-      grade: "",
       parentPacket: false,
       checkedIn: false,
       code: ""
@@ -164,23 +162,6 @@ let AttendeeForm = {
             value => (Attendee.selectedAttendee.lastName = value)
           )
         })
-      ),
-      m(
-        "fieldset",
-        m(
-          ".form-group",
-          m("label", "School"),
-          m("input[disabled]", {
-            value: Attendee.selectedAttendee.school
-          })
-        ),
-        m(
-          ".form-group",
-          m("label", "Grade"),
-          m("input[disabled]", {
-            value: Attendee.selectedAttendee.grade
-          })
-        )
       ),
       m(
         "fieldset",
