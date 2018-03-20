@@ -131,7 +131,8 @@ let AttendeeForm = {
               id: Attendee.selectedAttendee.id,
               firstName: Attendee.selectedAttendee.firstName.trim(),
               lastName: Attendee.selectedAttendee.lastName.trim(),
-              code: Attendee.selectedAttendee.code
+              code: Attendee.selectedAttendee.code,
+              type: Attendee.selectedAttendee.type
             }
           });
           Attendee.attendeeList.find(

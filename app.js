@@ -12,12 +12,14 @@ const SSE = require("sse");
 const config = require("./config.json");
 const base = new airtable({ apiKey: config.apiKey }).base(config.base);
 
+const loadPeople = require("./lib/server/loadPeople.js");
+
 const app = express();
 
 app.use(bodyParser.json());
 app.use(helmet());
 
-let attendeeList = [];
+let peopleList = [];
 let printQueue = queue({
   autostart: true,
   concurrency: 1,
@@ -47,47 +49,6 @@ let log = msg => {
   console.log(`[${new Date().toLocaleString()}] ${msg}`);
 };
 
-let loadAttendees = () => {
-  let newAttendeeList = [];
-  let trim = str => (str || "").trim();
-
-  base("AttendeesMentors")
-    .select({
-      fields: [
-        "First Name",
-        "Last Name",
-        "Parent Packet",
-        "Checked In",
-        "Code"
-      ],
-      filterByFormula: "NOT({Code} = 'DEVELOPER_CHECKIN_LIST')"
-    })
-    .eachPage(
-      (records, fetchNextPage) => {
-        newAttendeeList = newAttendeeList.concat(
-          records.map(r => ({
-            id: r.id,
-            firstName: trim(r.get("First Name")),
-            lastName: trim(r.get("Last Name")),
-            parentPacket: !!r.get("Parent Packet"),
-            checkedIn: !!r.get("Checked In"),
-            code: r.get("Code").text
-          }))
-        );
-        fetchNextPage();
-      },
-      err => {
-        if (err) {
-          console.error(err);
-          return;
-        } else {
-          attendeeList = newAttendeeList;
-          log(`Loaded ${attendeeList.length} attendees`);
-        }
-      }
-    );
-};
-
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/normalize.css", (req, res) => {
   res.sendFile(
@@ -100,8 +61,8 @@ app.get("/hint.css", (req, res) => {
   );
 });
 
-app.get("/attendees", (req, res) => {
-  res.json(attendeeList);
+app.get("/people", (req, res) => {
+  res.json(peopleList);
 });
 app.post("/print", (req, res) => {
   printQueue.push(cb => {
@@ -134,7 +95,25 @@ app.post("/print", (req, res) => {
         console.error(`Failed to print '${firstName}' '${lastName}'`, err);
       }
 
-      base("AttendeesMentors").update(
+      let tableName;
+      switch (req.body.type) {
+        case "Attendee":
+        case "Mentor":
+          tableName = "AttendeesMentors";
+          break;
+        case "Chaperone":
+          tableName = "Chaperones";
+          break;
+        case "Sponsor":
+        case "Judge":
+          tableName = "SponsorsJudges";
+          break;
+        default:
+          console.error(`Invalid person type: ${req.body.type}`);
+          return;
+      }
+
+      base(tableName).update(
         req.body.id,
         {
           "Checked In": true
@@ -142,15 +121,15 @@ app.post("/print", (req, res) => {
         (err, _) => {
           if (err) {
             console.error(
-              `Failed to check in ${firstName} ${lastName} (id: ${
+              `Failed to check in ${
+                req.body.type
+              } ${firstName} ${lastName} (id: ${
                 req.body.id
-              }) on Airtable`,
+              }) in table ${tableName}`,
               err
             );
           }
-          attendeeList.find(
-            attendee => attendee.id == req.body.id
-          ).checkedIn = true;
+          peopleList.find(person => person.id == req.body.id).checkedIn = true;
           pingSub.ping();
         }
       );
@@ -161,7 +140,6 @@ app.post("/print", (req, res) => {
   res.send("");
 });
 
-loadAttendees();
 let server = https.createServer(
   {
     key: fs.readFileSync("./server.key"),
@@ -181,6 +159,10 @@ sse.on("connection", client => {
   });
 });
 
+loadPeople(base, people => {
+  peopleList = people;
+  log(`Loaded ${peopleList.length} people`);
+});
 server.listen(8080, () => log("Server is running"));
 printQueue.start(err => {
   if (err) console.error(err);
