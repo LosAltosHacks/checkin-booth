@@ -244,6 +244,16 @@ let Dashboard = {
     m(
       "main",
       m(
+        "#logout-panel",
+        m(
+          "button",
+          {
+            onclick: _ => (location.href = "/logout")
+          },
+          "Log Out"
+        )
+      ),
+      m(
         "#people-panel",
         m("div", m(PersonPicker), m(PeopleCounts), m(ShowCheckedInButton)),
         m(PersonForm)
@@ -258,9 +268,11 @@ document.body.addEventListener("keydown", e => {
 });
 
 let es = new EventSource("/sse");
-es.addEventListener("ping", () => People.loadPeople().then(_ => {
+es.addEventListener("ping", () =>
+  People.loadPeople().then(_ => {
     People.search();
     m.redraw();
-}));
+  })
+);
 
 m.mount(document.body, Dashboard);

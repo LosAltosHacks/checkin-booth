@@ -7,7 +7,10 @@ const fs = require("fs");
 const helmet = require("helmet");
 const https = require("https");
 const path = require("path");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const queue = require("queue");
+const session = require("express-session");
 const SSE = require("sse");
 
 const config = require("./config.json");
@@ -18,6 +21,7 @@ const loadPeople = require("./lib/server/loadPeople.js");
 const app = express();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
 
 let peopleList = [];
@@ -52,14 +56,62 @@ let log = msg => {
 
 let docuSignES = new EventSource(config.docuSignES);
 docuSignES.addEventListener("docusign", _ => {
-    log("Received DocuSign ping");
-    loadPeople(base, people => {
-        peopleList = people;
-        log(`Loaded ${peopleList.length} people`);
-        pingSub.ping();
-    });
+  log("Received DocuSign ping");
+  loadPeople(base, people => {
+    peopleList = people;
+    log(`Loaded ${peopleList.length} people`);
+    pingSub.ping();
+  });
 });
 
+app.use(session({ secret: config.sessionSecret }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  "local",
+  new LocalStrategy((username, password, done) => {
+    let user = config.users.find(user => user.username == username && user.password == password);
+    if (user != undefined) {
+      log(`Logging in ${username}`);
+      return done(null, user);
+    } else {
+      return done(null, false, { message: "Incorrect username or password" });
+    }
+  })
+);
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login.html",
+    failureFlash: false
+  })
+);
+
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => done(null, config.users.find(user => user.id == id)));
+
+let authenticationMiddleware = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect("/login.html");
+  }
+};
+
+app.get("/", authenticationMiddleware, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+app.get("/index.html", authenticationMiddleware, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/normalize.css", (req, res) => {
   res.sendFile(path.join(__dirname, "node_modules", "normalize.css", "normalize.css"));
@@ -68,10 +120,10 @@ app.get("/hint.css", (req, res) => {
   res.sendFile(path.join(__dirname, "node_modules", "hint.css", "hint.min.css"));
 });
 
-app.get("/people", (req, res) => {
+app.get("/people", authenticationMiddleware, (req, res) => {
   res.json(peopleList);
 });
-app.post("/print", (req, res) => {
+app.post("/print", authenticationMiddleware, (req, res) => {
   printQueue.push(cb => {
     let nameRegex = /[^A-Za-z ()\-]/g;
     let firstName = req.body.firstName.replace(nameRegex, "").trim();
