@@ -1,6 +1,7 @@
 const airtable = require("airtable");
 const bodyParser = require("body-parser");
 const child_process = require("child_process");
+const EventSource = require("eventsource");
 const express = require("express");
 const fs = require("fs");
 const helmet = require("helmet");
@@ -48,6 +49,16 @@ let pingSub = {
 let log = msg => {
   console.log(`[${new Date().toLocaleString()}] ${msg}`);
 };
+
+let docuSignES = new EventSource(config.docuSignES);
+docuSignES.addEventListener("docusign", _ => {
+    log("Received DocuSign ping");
+    loadPeople(base, people => {
+        peopleList = people;
+        log(`Loaded ${peopleList.length} people`);
+        pingSub.ping();
+    });
+});
 
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/normalize.css", (req, res) => {

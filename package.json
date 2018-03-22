@@ -9,6 +9,7 @@
   "dependencies": {
     "airtable": "^0.5.2",
     "body-parser": "^1.18.2",
+    "eventsource": "^1.0.5",
     "express": "^4.16.2",
     "fuse.js": "^3.2.0",
     "helmet": "^3.12.0",

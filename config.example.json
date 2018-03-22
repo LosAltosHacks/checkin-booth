@@ -1,4 +1,5 @@
 {
     "apiKey": "YOUR AIRTABLE API KEY",
-    "base": "YOUR AIRTABLE BASE ID"
+    "base": "YOUR AIRTABLE BASE ID",
+    "docuSignES": "YOUR DOCUSIGN EVENTSOURCE ENDPOINT URL"
 }
