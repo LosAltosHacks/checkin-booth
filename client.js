@@ -233,6 +233,7 @@ let ShowCheckedInButton = {
           People.showCheckedIn = checked;
           People.search();
           People.clearSelectedPerson();
+          document.getElementById("people-search").select();
         }),
         checked: People.showCheckedIn
       })
