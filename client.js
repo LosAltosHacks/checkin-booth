@@ -208,7 +208,29 @@ let PersonForm = {
 
 let PeopleCounts = {
   view: () => {
-    let checkedInCount = People.peopleList.reduce((a, b) => a + (b.checkedIn ? 1 : 0), 0);
+    let typeToIndex = {
+      Attendee: 0,
+      Mentor: 1,
+      Chaperone: 2,
+      Sponsor: 3,
+      Judge: 4
+    };
+    let counts = People.peopleList.reduce(
+      (a, b) => {
+        a[typeToIndex[b.type]]++;
+        return a;
+      },
+      [0, 0, 0, 0, 0]
+    );
+
+    let checkedInCounts = People.peopleList.reduce(
+      (a, b) => {
+        if (b.checkedIn) a[typeToIndex[b.type]]++;
+        return a;
+      },
+      [0, 0, 0, 0, 0]
+    );
+
     let signPeople = People.peopleList.filter(
       p => p.type == "Attendee" || p.type == "Mentor" || p.type == "Chaperone"
     );
@@ -216,9 +238,15 @@ let PeopleCounts = {
 
     return m(
       "div",
-      `${checkedInCount}/${People.peopleList.length} people checked in`,
-      m("br"),
-      `${signedCount}/${signPeople.length} documents signed`
+      Object.keys(typeToIndex)
+        .map(key => {
+          let index = typeToIndex[key];
+          return m(
+            "div",
+            `${checkedInCounts[index]}/${counts[index]} ${key.toLowerCase()}s checked in`
+          );
+        })
+        .concat(m("div", `${signedCount}/${signPeople.length} documents signed`))
     );
   }
 };
