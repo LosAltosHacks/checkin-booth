@@ -54,14 +54,26 @@ let log = msg => {
   console.log(`[${new Date().toLocaleString()}] ${msg}`);
 };
 
+let lastLoaded = 0;
+let docuSignTimeout = undefined;
 let docuSignES = new EventSource(config.docuSignES);
-docuSignES.addEventListener("docusign", _ => {
-  log("Received DocuSign ping");
+let docuSignLoadPeople = _ =>
   loadPeople(base, people => {
+    lastLoaded = +new Date();
     peopleList = people;
     log(`Loaded ${peopleList.length} people`);
     pingSub.ping();
+    docuSignTimeout = undefined;
   });
+docuSignES.addEventListener("docusign", _ => {
+  log("Received DocuSign ping");
+  let now = +new Date();
+  let elapsed = now - lastLoaded;
+  if (elapsed < 10000 && docuSignTimeout != undefined) {
+    docuSignTimeout = setTimeout(docuSignLoadPeople, lastLoaded + 10000 - now);
+  } else if (elapsed >= 10000) {
+    docuSignLoadPeople();
+  }
 });
 
 app.use(session({ secret: config.sessionSecret }));
