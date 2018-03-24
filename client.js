@@ -181,6 +181,33 @@ let PersonForm = {
         })
       ),
       m(
+        People.selectedPerson.email == undefined ? ".hidden" : "fieldset",
+        m("label", "Email"),
+        m("input", {
+          disabled: true,
+          value: People.selectedPerson.email
+        })
+      ),
+      m(
+        People.selectedPerson.grade == undefined ? ".hidden" : "fieldset",
+        m(
+          ".form-group",
+          m("label", "High School"),
+          m("input", {
+            disabled: true,
+            value: People.selectedPerson.highSchool
+          })
+        ),
+        m(
+          ".form-group",
+          m("label", "Grade"),
+          m("input", {
+            disabled: true,
+            value: People.selectedPerson.grade
+          })
+        )
+      ),
+      m(
         People.requiresDocuments() ? "fieldset" : ".hidden",
         m(
           "label",
