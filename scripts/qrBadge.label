@@ -67,7 +67,7 @@
       <Rotation>Rotation0</Rotation>
       <IsMirrored>False</IsMirrored>
       <IsVariable>False</IsVariable>
-      <Text>This is the maximum length of 32</Text>
+      <Text>Maximum Len = 16</Text>
       <Type>QRCode</Type>
       <Size>Small</Size>
       <TextPosition>None</TextPosition>
@@ -78,6 +78,6 @@
       <HorizontalAlignment>Center</HorizontalAlignment>
       <QuietZonesPadding Left="0" Right="0" Top="0" Bottom="0"/>
     </BarcodeObject>
-    <Bounds X="57.6" Y="1202.75" Width="3124.8" Height="510.8495"/>
+    <Bounds X="57.6" Y="1202.75" Width="3124.8" Height="414.0353"/>
   </ObjectInfo>
 </DieCutLabel>

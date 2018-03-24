@@ -30,7 +30,7 @@
         </Element>
       </StyledText>
     </TextObject>
-    <Bounds X="57.6" Y="86.39999" Width="3124.8" Height="925.9423"/>
+    <Bounds X="57.6" Y="86.39999" Width="3124.8" Height="847.7322"/>
   </ObjectInfo>
   <ObjectInfo>
     <TextObject>
@@ -56,6 +56,6 @@
         </Element>
       </StyledText>
     </TextObject>
-    <Bounds X="57.6" Y="812.5179" Width="3124.8" Height="827.8695"/>
+    <Bounds X="57.6" Y="698.4858" Width="3124.8" Height="760.9313"/>
   </ObjectInfo>
 </DieCutLabel>
