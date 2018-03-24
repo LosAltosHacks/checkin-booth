@@ -132,6 +132,10 @@ app.get("/hint.css", (req, res) => {
   res.sendFile(path.join(__dirname, "node_modules", "hint.css", "hint.min.css"));
 });
 
+app.get("/refresh", authenticationMiddleware, (req, res) => {
+    docuSignLoadPeople();
+    res.send("Refreshed");
+});
 app.get("/people", authenticationMiddleware, (req, res) => {
   res.json(peopleList);
 });
