@@ -59,7 +59,8 @@ let People = {
       lastName: "",
       docuSign: false,
       checkedIn: false,
-      code: ""
+      code: "",
+      type: ""
     };
   },
   requiresDocuments() {
