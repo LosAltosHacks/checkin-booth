@@ -137,9 +137,9 @@ app.get("/people", authenticationMiddleware, (req, res) => {
 });
 app.post("/print", authenticationMiddleware, (req, res) => {
   printQueue.push(cb => {
-    let nameRegex = /[^A-Za-z ()\-]/g;
-    let firstName = req.body.firstName.replace(nameRegex, "").trim();
-    let lastName = req.body.lastName.replace(nameRegex, "").trim();
+    let filterRegex = /"$`/g;
+    let firstName = req.body.firstName.replace(filterRegex, "").trim();
+    let lastName = req.body.lastName.replace(filterRegex, "").trim();
 
     if (firstName.length == 0 || lastName.length == 0) {
       console.error(`Can't print '${firstName}' '${lastName}': name(s) are empty`);
@@ -157,7 +157,7 @@ app.post("/print", authenticationMiddleware, (req, res) => {
       try {
         if (req.body.code != undefined && req.body.code.length != 0) {
           child_process.execSync(
-            `osascript printBadge.applescript '${firstName}' '${lastName}' '${req.body.code}'`,
+            `osascript printBadge.applescript "${firstName}" "${lastName}" "${req.body.code}"`,
             {
               cwd: path.join(__dirname, "scripts")
             }
