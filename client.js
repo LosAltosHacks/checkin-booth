@@ -60,7 +60,8 @@ let People = {
       docuSign: false,
       checkedIn: false,
       code: "",
-      type: ""
+      type: "",
+      waitlisted: undefined
     };
   },
   requiresDocuments() {
@@ -215,6 +216,16 @@ let PersonForm = {
           "Documents signed",
           m("input[type=checkbox][disabled]", {
             checked: People.selectedPerson.docuSign
+          })
+        )
+      ),
+      m(
+        People.selectedPerson.waitlisted == undefined ? ".hidden" : "fieldset",
+        m(
+          "label",
+          "Waitlisted",
+          m("input[type=checkbox][disabled]", {
+            checked: People.selectedPerson.waitlisted
           })
         )
       ),
