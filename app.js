@@ -133,8 +133,8 @@ app.get("/hint.css", (req, res) => {
 });
 
 app.get("/refresh", authenticationMiddleware, (req, res) => {
-    docuSignLoadPeople();
-    res.send("Refreshed");
+  docuSignLoadPeople();
+  res.send("Refreshed");
 });
 app.get("/people", authenticationMiddleware, (req, res) => {
   res.json(peopleList);
