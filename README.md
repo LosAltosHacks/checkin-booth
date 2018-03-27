@@ -13,7 +13,7 @@ Check people into your event and print their name badge.
 1. Install DYMO Label and set up your label printer
 2. `npm install`
 3. Acquire Airtable. Put your API key and base ID in `config.json` (see `config.example.json`)
-4. Fill out the rest of `config.json` with your DocuSign ping endpoint, users, and session secret
+4. Fill out the rest of `config.json` with your DocuSign ping endpoint (optional), users, and session secret
 5. Generate self-signed certificates by running `./scripts/gen-https.sh` (you may need to modify the location of `openssl.cnf`)
 6. Build the client's `bundle.js` with `browserify`. (Hint: `npm start` will run `watchify` to do it for you.)
 7. `node app.js`

@@ -56,7 +56,6 @@ let log = msg => {
 
 let lastLoaded = 0;
 let docuSignTimeout = undefined;
-let docuSignES = new EventSource(config.docuSignES);
 let docuSignLoadPeople = _ =>
   loadPeople(base, people => {
     lastLoaded = +new Date();
@@ -65,16 +64,20 @@ let docuSignLoadPeople = _ =>
     pingSub.ping();
     docuSignTimeout = undefined;
   });
-docuSignES.addEventListener("docusign", _ => {
-  log("Received DocuSign ping");
-  let now = +new Date();
-  let elapsed = now - lastLoaded;
-  if (elapsed < 10000 && docuSignTimeout != undefined) {
-    docuSignTimeout = setTimeout(docuSignLoadPeople, lastLoaded + 10000 - now);
-  } else if (elapsed >= 10000) {
-    docuSignLoadPeople();
-  }
-});
+let docuSignES;
+if (config.docuSignES != undefined) {
+  docuSignES = new EventSource(config.docuSignES);
+  docuSignES.addEventListener("docusign", _ => {
+    log("Received DocuSign ping");
+    let now = +new Date();
+    let elapsed = now - lastLoaded;
+    if (elapsed < 10000 && docuSignTimeout != undefined) {
+      docuSignTimeout = setTimeout(docuSignLoadPeople, lastLoaded + 10000 - now);
+    } else if (elapsed >= 10000) {
+      docuSignLoadPeople();
+    }
+  });
+}
 
 app.use(session({ secret: config.sessionSecret }));
 app.use(passport.initialize());
