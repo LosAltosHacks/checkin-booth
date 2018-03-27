@@ -243,7 +243,10 @@ loadPeople(base, people => {
   peopleList = people;
   log(`Loaded ${peopleList.length} people`);
 });
-server.listen(8080, () => log("Server is running"));
+
+let port = process.env.PORT || 8080;
+server.listen(port, () => log(`Server is running on port ${port}`));
+
 printQueue.start(err => {
   if (err) console.error(err);
 });
