@@ -5,7 +5,7 @@ Check people into your event and print their name badge.
 * You are using a DYMO LabelWriter printer to print badges
 * You are printing on 2.25in x 1.25in labels
 * You have DYMO Label software installed on macOS (tested with Label v8.7.0.181 on macOS 10.12)
-* Your printing computer has the "DIN" font installed on it
+* Your printing computer has the "DIN Regular" and "DIN Bold" fonts installed on it
 * Your Airtable schema matches what `app.js` is expecting
 * You think self-signed certificates are a suitable form of security over the local network
 
