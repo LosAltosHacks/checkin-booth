@@ -218,7 +218,7 @@ app.post("/print", authenticationMiddleware, (req, res) => {
       );
 
       cb();
-    }, 2000);
+    }, 1000);
   });
   res.send("");
 });
