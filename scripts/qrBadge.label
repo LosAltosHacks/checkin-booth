@@ -24,7 +24,7 @@
         <Element>
           <String>First Name</String>
           <Attributes>
-            <Font Family="DIN" Size="13" Bold="True" Italic="False" Underline="False" Strikeout="False"/>
+            <Font Family="Poppins" Size="13" Bold="True" Italic="False" Underline="False" Strikeout="False"/>
             <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/>
           </Attributes>
         </Element>
@@ -50,7 +50,7 @@
         <Element>
           <String>Last Name</String>
           <Attributes>
-            <Font Family="DIN" Size="13" Bold="False" Italic="False" Underline="False" Strikeout="False"/>
+            <Font Family="Poppins" Size="13" Bold="False" Italic="False" Underline="False" Strikeout="False"/>
             <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/>
           </Attributes>
         </Element>
