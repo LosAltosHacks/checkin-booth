@@ -1,0 +1,100 @@
+html {
+  box-sizing: border-box;
+  /* Thank you, Bulma. */
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 18px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4em;
+}
+
+#logout-panel {
+    text-align: right;
+}
+
+#people-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+#people-list {
+  height: 18em;
+  overflow-y: auto;
+  margin-bottom: 1em;
+}
+
+.checked-in {
+  color: #888;
+}
+
+.person-selected {
+  font-weight: bold;
+}
+
+.type-indicator {
+    display: inline-block;
+    border-radius: 50%;
+    height: 0.7em;
+    width: 0.7em;
+    margin-right: 0.2em;
+}
+.attendee {
+    background: #78c6f0;
+}
+.sponsor {
+    background: #2ecc71;
+}
+.mentor {
+    background: #f39c12;
+}
+.chaperone {
+    background: #ffeb3b;
+}
+.judge {
+    background: #9e00f3;
+}
+
+#show-checked-in {
+  margin-top: 1em;
+}
+
+form {
+  margin-left: 1em;
+}
+
+fieldset {
+  border: 0;
+  padding-left: 0;
+}
+
+.form-group {
+  display: inline-block;
+}
+
+.form-group + .form-group {
+  margin-left: 0.5em;
+}
+
+label {
+  display: block;
+}
+
+input[type=checkbox] {
+  margin-left: 5px;
+}
+
+input + input {
+  margin-left: 0.5em;
+}
+
+.hidden {
+    display: none;
+}

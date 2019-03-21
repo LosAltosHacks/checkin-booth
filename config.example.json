@@ -1,0 +1,13 @@
+{
+    "apiKey": "YOUR AIRTABLE API KEY",
+    "base": "YOUR AIRTABLE BASE ID",
+    "docuSignES": "YOUR DOCUSIGN EVENTSOURCE ENDPOINT URL",
+    "users": [
+        {
+            "id": "EXAMPLE ID",
+            "username": "exampleUsername",
+            "password": "examplePassword"
+        }
+    ],
+    "sessionSecret": "YOUR SESSION SECRET"
+}
